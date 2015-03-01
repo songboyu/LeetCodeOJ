@@ -31,10 +31,9 @@ vector<int> twoSum(vector<int> &numbers, int target) {
 }
 
 int main(){
-    int v[] = {2,4,9,6,7,3,8};
-    vector<int> numbers(v,v+7);
+    vector<int> numbers = {2,4,9,6,7,3,8};
     vector<int> result = twoSum(numbers, 15);
-    for(vector<int>::iterator it=result.begin(); it!=result.end(); ++it){
+    for(vector<int>::iterator it=result.begin(); it!=result.end(); it++){
         cout << *(it) << endl;
     }
     return 0;
