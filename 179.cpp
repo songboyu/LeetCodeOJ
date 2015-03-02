@@ -16,16 +16,16 @@ using namespace std;
 class Solution {
 public:
     int shouldBeFront(int a, int b){
-        int i = a, j = b;
-        int x = a*10, y = b*10;
+        string strA, strB;
+        stringstream ssA, ssB;
 
-        while(j /= 10) x *= 10;
-        while(i /= 10) y *= 10;
+        ssA << a;
+        ssA >> strA;
 
-        x += b;
-        y += a;
+        ssB << b;
+        ssB >> strB;
 
-        return x>y ? 1 : 0;
+        return (strA + strB) > (strB + strA);
     }
     void quick_sort(vector<int> &s, int l, int r){
         if(l < r) {
@@ -48,19 +48,43 @@ public:
         string ans;
         quick_sort(num, 0, num.size()-1);
 
-        for(vector<int>::iterator it=num.begin(); it!=num.end(); it++){
+        for(vector<int>::iterator it=num.begin(); it!=num.end(); it++) {
             stringstream ss;
+            string s;
+
             ss << *(it);
-            string n;
-            ss >> n;
-            ans += n;
+            ss >> s;
+
+            ans += s;
         }
-        return ans;
+        return ans[0]=='0' ? "0" : ans;
+    }
+};
+
+//c++11
+class Solution2 {
+public:
+    string largestNumber(vector<int> &num) {
+        vector<string> strs;
+        for_each(num.begin(), num.end(), [&](int i) {
+            strs.push_back(to_string(i));
+        });
+        sort(strs.begin(), strs.end(), [&](const string& a, const string& b) {
+            return (a + b) > (b + a);
+        });
+        string ans = "";
+        for_each(strs.begin(), strs.end(), [&](string& i) {
+            if (ans == "" && i == "0") return;
+            ans += i;
+        });
+        return ans == "" ? "0" : ans;
     }
 };
 
 int main(){
     vector<int> num = {3, 30, 34, 5, 9};
-    Solution s;
+//    vector<int> num = {0, 0, 0, 0};
+    Solution2 s;
     cout << s.largestNumber(num) << endl;
+    return 0;
 }
