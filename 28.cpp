@@ -11,32 +11,44 @@ using namespace std;
 
 class Solution {
 public:
-    int* makeMap(char *needle){
-        int n = strlen(needle);
-        int cMap[] = {0,0,0,0,1,2,0};
-        for(int i=0; i<n; i++){
-
+    int* getNext(char *p){
+        int j,k;
+        int n = strlen(p);
+        int next[n];
+        next[0]=-1;
+        j=0;
+        k=-1;
+        while(j<n-1)
+        {
+            if(k==-1||p[j]==p[k])    //匹配的情况下,p[j]==p[k]
+            {
+                j++;
+                k++;
+                next[j]=k;
+            }
+            else                   //p[j]!=p[k]
+                k=next[k];
         }
-        return cMap;
+        return next;
     }
     int strStr(char *haystack, char *needle) {
-        int *cMap = makeMap(needle);
         int m = strlen(haystack);
         int n = strlen(needle);
+        if(n == 0){
+            return 0;
+        }
+        int *next = getNext(needle);
         int i = 0,j = 0;
 
-        while(i<m && j<n) {
-            while(haystack[i]!=needle[j] && j==0){
-                i++;
-            }
-            while (haystack[i]==needle[j] && j<n) {
+        while(i<m) {
+            if (haystack[i]==needle[j] || j==-1) {
                 i++;
                 j++;
+            }else{
+                j = next[j];
             }
             if (j == n) {
                 return i - n;
-            } else {
-                j = cMap[j - 1];
             }
         }
         return -1;
@@ -44,9 +56,8 @@ public:
 };
 
 int main(){
-    char *haystack = "BBC ABCDAB ABCDABCDABDE";
-    char *needle = "ABCDABD";
-    //应返回15
+    char *haystack = "";
+    char *needle = "a";
     Solution s;
     cout << s.strStr(haystack, needle) << endl;
 };
